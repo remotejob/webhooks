@@ -78,8 +78,8 @@ func (hook Webhook) ParsePayload(w http.ResponseWriter, r *http.Request) {
 	// if no event registered
 	if !ok {
 		webhooks.DefaultLog.Info(fmt.Sprintf("Webhook Event %s not registered, it is recommended to setup only events in gitlab that will be registered in the webhook to avoid unnecessary traffic and reduce potential attack vectors.", event))
-		log.Println("fn", gitLabEvent)
-		return
+
+		// return
 	}
 
 	payload, err := ioutil.ReadAll(r.Body)
@@ -88,6 +88,8 @@ func (hook Webhook) ParsePayload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading Payload", http.StatusInternalServerError)
 		return
 	}
+	log.Println(string(payload))
+
 	webhooks.DefaultLog.Debug(fmt.Sprintf("Payload:%s", string(payload)))
 
 	// If we have a Secret set, we should check the MAC
