@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/remotejob/webhooks"
@@ -77,6 +78,7 @@ func (hook Webhook) ParsePayload(w http.ResponseWriter, r *http.Request) {
 	// if no event registered
 	if !ok {
 		webhooks.DefaultLog.Info(fmt.Sprintf("Webhook Event %s not registered, it is recommended to setup only events in gitlab that will be registered in the webhook to avoid unnecessary traffic and reduce potential attack vectors.", event))
+		log.Println("fn", gitLabEvent)
 		return
 	}
 
