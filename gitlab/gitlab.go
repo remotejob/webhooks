@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/remotejob/webhooks"
@@ -35,7 +34,8 @@ const (
 	MergeRequestEvents       Event = "Merge Request Hook"
 	WikiPageEvents           Event = "Wiki Page Hook"
 	PipelineEvents           Event = "Pipeline Hook"
-	BuildEvents              Event = "Build Hook"
+	// BuildEvents              Event = "Build Hook"
+	BuildEvents Event = "Job Hook"
 )
 
 // New creates and returns a WebHook instance denoted by the Provider type
@@ -79,7 +79,7 @@ func (hook Webhook) ParsePayload(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		webhooks.DefaultLog.Info(fmt.Sprintf("Webhook Event %s not registered", event))
 
-		// return
+		return
 	}
 
 	payload, err := ioutil.ReadAll(r.Body)
@@ -88,9 +88,9 @@ func (hook Webhook) ParsePayload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading Payload", http.StatusInternalServerError)
 		return
 	}
-	log.Println("PAYLOAD", string(payload))
+	// log.Println("PAYLOAD", string(payload))
 
-	webhooks.DefaultLog.Info(string(payload))
+	// webhooks.DefaultLog.Info(string(payload))
 
 	webhooks.DefaultLog.Debug(fmt.Sprintf("Payload:%s", string(payload)))
 
